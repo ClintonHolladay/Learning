@@ -45,11 +45,14 @@ int main()
             if (choice == 1)
             {
                 invalidAnswer = false;
-                cout << "Your username & password need to be a single line of characters." << endl;
+                cout << "Your username & password can be any arragnment of numbers, characters, or words." << endl;
                 cout << "Enter your username: " << endl;
-                cin >> username;
+                cin.ignore();
+                getline(cin, username);
+                //cin >> username;
                 cout << "Enter your password: " << endl;
-                cin >> password;
+                getline(cin, password);
+                //cin >> password;
                 system("CLS");
 
                 ofstream registerFile;
@@ -85,9 +88,12 @@ int main()
             {
                 invalidAnswer = false;
                 cout << "Please enter your username: " << endl;
-                cin >> usernameTry;
+                cin.ignore();
+                getline(cin, usernameTry);
+                //cin >> usernameTry;
                 cout << "Please enter your password: " << endl;
-                cin >> passwordTry;
+                getline(cin, passwordTry);
+                //cin >> passwordTry;
                 string un;
                 string pw;
                 ifstream loginFile;
@@ -98,7 +104,8 @@ int main()
                 }
                 else
                 {
-                    loginFile >> un;
+                    getline(loginFile, un);
+                    //loginFile >> un;
                 }
                 loginFile.close();
 
@@ -109,7 +116,8 @@ int main()
                 }
                 else
                 {
-                    loginFile >> pw;
+                    getline(loginFile, pw);
+                    //loginFile >> pw;
                 }
                 loginFile.close();
 
@@ -274,3 +282,4 @@ void playAgain()
             cout << "Invalid input! try again..." << endl;
     }
 }
+
