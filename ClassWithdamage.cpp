@@ -31,7 +31,7 @@ int main()
     {
         cout << "You got hit!!!" << endl;
         cout << "============================================" << endl;
-        cout << "Your health is now only: " << zelda->printHealth() << "!!!!!!! You are Fucked!" << endl;
+        cout << "Your health is now only: " << zelda->printHealth() << "!!!!!!! You are Damaged!" << endl;
     }
     else
         cout << "You are dead!!!!" << endl;
