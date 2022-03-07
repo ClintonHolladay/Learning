@@ -1,13 +1,15 @@
+//RegistrationWithGame.cpp
+
 #include <iostream> 
 #include <ctime>
 #include <cstdlib>
 #include <fstream>
-#include<string>
+#include <string>
 
 using namespace std;
 
 const float MAX_TURN = .5;
-const int MAX_CHIPS = 100;
+const int MAX_CHIPS = 99;
 bool player1Turn = true;
 bool gameOver = false;
 bool continueGame = true;
@@ -27,13 +29,16 @@ void playAgain();
 int main()
 {
     bool accessGranted = false;
-    int choice;
+    string choice;
     int counter = 0;
     string username;
     string password;
     string passwordTry;
     string usernameTry;
-    cout << "Please login to access the game. If you have not registered you will need to register before you can login.\n" << endl;
+    cout << "\n         CHIPS GAME!!!" << endl;
+    cout << "       Login / Registration\n" << endl;
+    cout << "======================================\n" << endl;
+    cout << "Please login to access the game.\nIf you have not registered you will need to register before you can login.\n" << endl;
     cout << "Choose an option: " << endl;
     cout << "1: Register.\n2: Login." << endl;
     while (!accessGranted)
@@ -42,17 +47,15 @@ int main()
         while (invalidAnswer)
         {
             cin >> choice;
-            if (choice == 1)
+            if (choice == "1")
             {
                 invalidAnswer = false;
                 cout << "Your username & password can be any arragnment of numbers, characters, or words." << endl;
                 cout << "Enter your username: " << endl;
-                cin.ignore();
+                cin.ignore(256, '\n');
                 getline(cin, username);
-                //cin >> username;
                 cout << "Enter your password: " << endl;
                 getline(cin, password);
-                //cin >> password;
                 system("CLS");
 
                 ofstream registerFile;
@@ -81,19 +84,15 @@ int main()
                 cout << "Thank you for registering! You are able to login now.\n" << endl;
                 cout << "Choose an option: " << endl;
                 cout << "1: Register.\n2: Login." << endl;
-
-                //accessGranted = true;
             }
-            else if (choice == 2)
+            else if (choice == "2")
             {
                 invalidAnswer = false;
                 cout << "Please enter your username: " << endl;
-                cin.ignore();
+                cin.ignore(256, '\n');
                 getline(cin, usernameTry);
-                //cin >> usernameTry;
                 cout << "Please enter your password: " << endl;
                 getline(cin, passwordTry);
-                //cin >> passwordTry;
                 string un;
                 string pw;
                 ifstream loginFile;
@@ -105,7 +104,6 @@ int main()
                 else
                 {
                     getline(loginFile, un);
-                    //loginFile >> un;
                 }
                 loginFile.close();
 
@@ -117,7 +115,6 @@ int main()
                 else
                 {
                     getline(loginFile, pw);
-                    //loginFile >> pw;
                 }
                 loginFile.close();
 
@@ -143,6 +140,8 @@ int main()
             }
             else
             {
+                cin.clear();
+                cin.ignore(256, '\n');
                 cout << "You entered an invalid answer... Please try again." << endl;
                 invalidAnswer = true;
             }
@@ -185,10 +184,10 @@ void introduction()
 {
     cout << "CHIP GAME!!!\n\nYou will compete against the computer to take the last chip.";
     cout << "The most you can take is 1/2 of the available chips." << endl;
-    cout << "Player 1, please enter your name: ";
+    cout << "Player, please enter your name: ";
     cin >> playerName;
     cout << "\nThanks and good luck!" << endl << endl;
-    chipsInPile = (rand() % MAX_CHIPS) + 1;
+    chipsInPile = (rand() % MAX_CHIPS) + 2;
     cout << "This round will start with " << chipsInPile << " chips in the pile\n";
 }
 
@@ -203,23 +202,38 @@ void gameLoop()
         if (player1Turn)
         {
             cout << "How many chips would you like to take?" << endl;
-            cin >> playerTaken;
-            if (playerTaken > maxToTake)
+            bool notNumber = true;
+            while(notNumber)
             {
-                cout << "Your took to many, try again..." << endl << endl;
-                continue;
+                cin >> playerTaken;
+                if (cin.fail())
+                {
+                    cin.clear();
+                    cin.ignore();
+                    cout << "Please provide a number only..." << endl;
+                    notNumber = true;
+                    cout << "Lets try again... How many chips would you like to take?" << endl;
+                }
+                else if (playerTaken > maxToTake)
+                {
+                    cout << "You took to many, try again..." << endl << endl;
+                    notNumber = false;
+                    continue;
+                }
+                else
+                {
+                    chipsInPile -= playerTaken;
+                    cout << "There are " << chipsInPile << " chips left." << endl << endl;
+                    notNumber = false;
+                    player1Turn = false;
+                }
             }
-            else
-            {
-                chipsInPile -= playerTaken;
-                cout << "There are " << chipsInPile << " chips left." << endl << endl;
-                player1Turn = false;
-            }
+            
         }
         else
         {
             int computerTaken = (rand() % maxToTake) + 1;
-            cout << "The computer took " << computerTaken << " chips." << endl << endl;
+            cout << "(The computer took " << computerTaken << " chips.)" << endl << endl;
             chipsInPile -= computerTaken;
             cout << "There are " << chipsInPile << " chips left." << endl << endl;
             player1Turn = true;
@@ -282,4 +296,3 @@ void playAgain()
             cout << "Invalid input! try again..." << endl;
     }
 }
-
