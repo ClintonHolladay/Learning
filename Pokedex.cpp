@@ -1,30 +1,46 @@
 // Pokedex.cpp
-// fix cin.ignore()s
-// limit the types of stages
-// limit the types of types
+// add color
+//#define RED   "\x1B[31m"
+//#define GRN   "\x1B[32m"
+//#define YEL   "\x1B[33m"
+//#define BLU   "\x1B[34m"
+//#define MAG   "\x1B[35m"
+//#define CYN   "\x1B[36m"
+//#define WHT   "\x1B[37m"
+//#define RESET "\x1B[0m"
+// added inputFail() to the edit menu
+// added a prompt to the edit menu if no pokemon exist in the program
+// deal with case sensitivity
+// created inputTextFormat() to change user string inputs to proper capitalization
 
 // TODO:
-// deal with case sensitivity
-// add color
-//printf("\x1B[31mTexting\033[0m\t\t"); //red
-        //printf("\x1B[32mTexting\033[0m\t\t"); //green
-        //printf("\x1B[35mTexting\033[0m\t\t"); // purple
-        //printf("\x1B[36mTexting\033[0m\t\t"); // blue
-        //printf("\x1B[93mTexting\033[0m\n"); // yellow
+// distribute inputTextFormat()
+// delete user input white spaces at the end of the input
+// add data write/read to/from a file so that Pokemon can be stored from one progam run to the next
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
+
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
+#define YEL   "\x1B[33m"
+#define BLU   "\x1B[34m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define WHT   "\x1B[37m"
+#define RESET "\x1B[0m"
+
 using namespace std;
 
 class Pokemon
 {
-    int m_HP;
+    int m_HP{};
     string m_attack1Name;
     string m_attack2Name;
-    int m_attack1;
-    int m_attack2;
-    int m_energyReq;
+    int m_attack1{};
+    int m_attack2{};
+    int m_energyReq{};
     string m_stage;
     string m_name;
     string m_type;
@@ -35,6 +51,7 @@ public:
     string getName();
     void editPokemon();
     void inputFail(int& input);
+    void inputTextFormat(string& input1);
 };
 void Pokemon::getPokemon()
 {
@@ -51,8 +68,9 @@ void Pokemon::setPokemon()
 {
     cout << "\n\nYou are about to create a new Pokemon! Are you excited???" << endl;
     cout << "What do you want to name this Pokemon?" << endl;
-    cin.ignore(256, '\n'); getline(cin, m_name);
-    cout << "How many Hit Points do you want " << m_name <<" to have? " << endl;
+    cin.ignore(256, '\n');
+    inputTextFormat(m_name);
+    cout << "How many Hit Points do you want " << m_name <<"to have? " << endl;
     inputFail(m_HP);
     cout << "What stage evolution will " << m_name << " be at?" << endl;
     cin.ignore(256, '\n');
@@ -63,14 +81,17 @@ void Pokemon::setPokemon()
         getline(cin, m_stage);
         if (m_stage != "Basic" && m_stage != "1" && m_stage != "2")
         {
-            cout << "Sorry that is not a known Stage of Pokemon. If you have made a discovery please inform Professor Oak!" << endl;
+            cout << "Sorry, that is not a known Stage of Pokemon. If you have made a discovery please inform Professor Oak!" << endl;
             cout << "Please provide \"Basic\" or \"1\" or \"2\"." << endl;
             num = true;
         }
     }
     cout << "What Type will " << m_name << " be?" << endl;
-    cout << "Your potions are: Normal, Fire, Water, Grass, Electric, Ice, Fighting,\n"
-         << "Poison, Ground, Flying, Psychic, Bug, Rock, Ghost and Dragon." << endl;
+    cout << "Your options are: "<< "Normal," << RED << " Fire" << RESET << "," << BLU << " Water" << RESET
+         << "," << GRN << " Grass" << RESET << "," << YEL << " Electric" << RESET << ", " << CYN << "Ice" << RESET << ","
+         << RED << " Fighting" << RESET << "," << GRN << " \n"<< "\tPoison" << RESET << "," << YEL << " Ground" 
+         << RESET << "," << CYN << " Flying" << RESET << "," << MAG << " Psychic" << RESET << "," << GRN << " Bug"
+         << RESET << "," << YEL << " Rock" << RESET << "," << MAG << " Ghost" << RESET << " and" << RED << " Dragon" << RESET << "." << endl;
     num = true;
     while (num)
     {
@@ -80,7 +101,7 @@ void Pokemon::setPokemon()
             && m_type != "Normal" && m_type != "Ice" && m_type != "Fighting" && m_type != "Poison" && m_type != "Ground" 
             && m_type != "Psychic" && m_type != "Bug" && m_type != "Rock" && m_type != "Ghost" && m_type != "Dragon")
         {
-            cout << "Sorry that is not a known Type of Pokemon. If you have made a discovery please inform Professor Oak!" << endl;
+            cout << "Sorry, that is not a known Type of Pokemon. If you have made a discovery please inform Professor Oak!" << endl;
             cout << "Please provide one of the options listed above." << endl;
             num = true;
         }
@@ -138,23 +159,23 @@ void Pokemon::editPokemon()
             break;
         case 4:
             cout << "Enter the new HP: ";
-            cin >> m_HP;
+            inputFail(m_HP);
             break;
         case 5:
             cout << "Enter the new Attack 1 Name: ";
             cin.ignore(256, '\n'); getline(cin, m_attack1Name);
             cout << "Enter the new Attack 1 Damage: ";
-            cin >> m_attack1;
+            inputFail(m_attack1);
             break;
         case 6:
             cout << "Enter the new Attack 2 Name: ";
             cin.ignore(256, '\n'); getline(cin, m_attack1Name);
             cout << "Enter the new Attack 2 Damage: ";
-            cin >> m_attack2;
+            inputFail(m_attack2);
             break;
         case 7:
             cout << "Enter the new Energy Requirements: ";
-            cin >> m_energyReq;
+            inputFail(m_energyReq);
             break;
         case 8:
             editing = false;
@@ -180,15 +201,25 @@ void Pokemon::inputFail(int& input)
         }
     }
 }
+void Pokemon::inputTextFormat(string& input1)
+{
+    getline(cin, input1);
+    for (int i = 0; i < input1.length(); i++)
+    {
+        input1[i] = tolower(input1[i]);
+    }
+    input1[0] = toupper(input1[0]);
+}
+
 int main()
 {
-    Pokemon* pokemon[50];
+    Pokemon* pokemon[50]{};
     int i = 0, choice;
     string search;
     string edit;
     while (1)
     {
-        cout << "\n\tMAIN MENU:\n" << endl;
+        cout << GRN << "\n\tMAIN MENU:\n" << RESET << endl;
         cout << "1. Create new Pokemon." << endl;
         cout << "2. Search for a Pokemon." << endl;
         cout << "3. Edit info for a Pokemon." << endl;
@@ -219,6 +250,7 @@ int main()
             {
                 cout << "Please enter the Pokemon name you are looking for." << endl;
                 cin.ignore(256, '\n'); getline(cin, search);
+                // pokemon[i]->inputTextFormat(search);
                 for (int j = 0; j < i; j++)
                 {
                     if (pokemon[j]->getName() == search)
@@ -238,23 +270,31 @@ int main()
             }
             break;
         case 3:
-            cout << "Please enter the Pokemon name you want to edit info for." << endl;
-            cin.ignore(256, '\n'); getline(cin, edit);
-            for (int k = 0; k < i; k++)
+            if (i == 0)
             {
-                if (pokemon[k]->getName() == edit)
+                cout << "There are no Pokemon in the database. Please add a Pokemon to search." << endl;
+                break;
+            }
+            else
+            {
+                cout << "Please enter the Pokemon name you want to edit info for." << endl;
+                cin.ignore(256, '\n'); getline(cin, edit);
+                for (int k = 0; k < i; k++)
                 {
-                    cout << "\nWe found it!!" << endl;
-                    cout << "This Pokemon's current info is:\n" << endl;
-                    pokemon[k]->getPokemon();
-                    cout << "You many now choose different info.\n" << endl;
-                    pokemon[k]->editPokemon();
-                    break;
-                }
-                else if (k == i-1)
-                {
-                    cout << "No Pokemon by this name was found in our database..." << endl;
-                    break;
+                    if (pokemon[k]->getName() == edit)
+                    {
+                        cout << "\nWe found it!!" << endl;
+                        cout << "This Pokemon's current info is:\n" << endl;
+                        pokemon[k]->getPokemon();
+                        cout << "You may now choose different info.\n" << endl;
+                        pokemon[k]->editPokemon();
+                        break;
+                    }
+                    else if (k == i - 1)
+                    {
+                        cout << "No Pokemon by this name was found in our database..." << endl;
+                        break;
+                    }
                 }
             }
             break;
@@ -264,7 +304,4 @@ int main()
         default: cout << "Invalid Answer!!! Try again." << endl;
         }
     }
-
-
-
 }
