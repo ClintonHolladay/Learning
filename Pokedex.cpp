@@ -1,20 +1,37 @@
 // Pokedex.cpp
-// add color
-//#define RED   "\x1B[31m"
-//#define GRN   "\x1B[32m"
-//#define YEL   "\x1B[33m"
-//#define BLU   "\x1B[34m"
-//#define MAG   "\x1B[35m"
-//#define CYN   "\x1B[36m"
-//#define WHT   "\x1B[37m"
-//#define RESET "\x1B[0m"
-// added inputFail() to the edit menu
-// added a prompt to the edit menu if no pokemon exist in the program
-// deal with case sensitivity
-// created inputTextFormat() to change user string inputs to proper capitalization
+// partial edit to white space deletion
 
 // TODO:
 // distribute inputTextFormat()
+ for(int i = 0; i < input.length(); i++)
+ {
+      if(input[i] == ' ')
+          {
+              continue;
+          }
+      else
+         output += input[i];
+ }
+
+ while (input[0] == ' ')
+ {
+     for (int i = 1; i <= input.length(); i++)
+     {
+         output[i - 1] = input[i];
+         input = output;
+     }
+ }
+
+ while (input[input.length()-1] == ' ')
+ {
+     string output[input.length() - 2]{};
+     for (int i = input.length() - 2; i >= 0; i--)
+     {
+         output[i] = input[i];
+         input = output;
+     }
+ }
+ 
 // delete user input white spaces at the end of the input
 // add data write/read to/from a file so that Pokemon can be stored from one progam run to the next
 
