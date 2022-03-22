@@ -1,10 +1,5 @@
 // Pokedex.cpp
-// completion of white space deletion
-// integrated white space deletion with inputTextFormet();
-// inputFail now requires a positive number input
-// first and last names will now be properly capitalized by inputTextFormat();
-// distributed inputTextFormat()
-// began file creation
+// began file creation 2 no sure what im doing....
 
 
 // TODO:
@@ -28,6 +23,7 @@ using namespace std;
 
 class Pokemon
 {
+    int pokemonNum{};
     int m_HP{};
     string m_attack1Name;
     string m_attack2Name;
@@ -53,6 +49,7 @@ public:
     void editPokemon();
     void inputFail(int& input);
     void inputTextFormat(string& input1);
+    void readFromFile();
 };
 void Pokemon::getPokemon()
 {
@@ -273,16 +270,57 @@ void Pokemon::inputTextFormat(string& input1)
         } 
     }
 }
+void Pokemon::readFromFile()
+{
+    ifstream pokemonFile;
+    pokemonFile.open("PokemonDatabase.txt");
+    // pokemonFile >> pokemonNum;
+    // skip lines = to a multiple of i
+   /* for (int n = 1; n <= (n * i); n++)
+    {
+        pokemonFile.ignore(256, '\n');
+    }*/
+    if (pokemonFile.fail())
+    {
+        cout << "pokemonFile failed to open" << endl;
+    }
+    else
+    {
+        getline(cin, m_name);
+        /*pokemonFile >> m_stage;
+        pokemonFile >> m_type;
+        pokemonFile >> m_HP;
+        pokemonFile >> m_attack1Name;
+        pokemonFile >> m_attack1;
+        pokemonFile >> m_attack2Name;
+        pokemonFile >> m_attack2;
+        pokemonFile >> m_energyReq;*/
+        pokemonFile.close();
+    }
+}
 
 int main()
 {
     Pokemon* pokemon[50]{};
-    ofstream pokemonFile;
+    fstream pokemonFile1;
     int i = 0, choice;
     string search;
     string edit;
     while (1)
     {
+        cout << "howdy partner" << endl;
+        /*pokemonFile1.open("PokemonDatabase.txt", ios::in);
+        {
+            pokemonFile1 >> i;
+            i -= 1;
+            pokemonFile1.close();
+        }*/
+       /* for (i; i <= 50; i++)
+        {
+            pokemon[i]->readFromFile(i);
+
+        }*/
+        pokemon[i]->readFromFile();
         cout << GRN << "\n\tMAIN MENU:\n" << RESET << endl;
         cout << "1. Create new Pokemon." << endl;
         cout << "2. Search for a Pokemon." << endl;
@@ -301,25 +339,26 @@ int main()
         case 1: 
             pokemon[i] = new Pokemon();
             pokemon[i]->setPokemon();
-            pokemonFile.open("PokemonDatabase.txt");
-            if (pokemonFile.fail())
+            pokemonFile1.open("PokemonDatabase.txt", ios::out);
+            if (pokemonFile1.fail())
             {
                 cout << "pokemonFile failed to open" << endl;
             }
             else
             {
-                pokemonFile << i + 1 << endl;
-                pokemonFile << pokemon[i]->getName() << endl;
-                pokemonFile << pokemon[i]->getStage() << endl;
-                pokemonFile << pokemon[i]->getType() << endl;
-                pokemonFile << pokemon[i]->getHP() << endl;
-                pokemonFile << pokemon[i]->getAttack1Name() << endl;
-                pokemonFile << pokemon[i]->getAttack1Damage() << endl;
-                pokemonFile << pokemon[i]->getAttack2Name() << endl;
-                pokemonFile << pokemon[i]->getAttack2Damage() << endl;
-                pokemonFile << pokemon[i]->getEnergyReq() << endl; 
+                // pokemonFile1 << i + 1 << endl;
+                pokemonFile1 << pokemon[i]->getName() << endl;
+                pokemonFile1 << pokemon[i]->getStage() << endl;
+                pokemonFile1 << pokemon[i]->getType() << endl;
+                pokemonFile1 << pokemon[i]->getHP() << endl;
+                pokemonFile1 << pokemon[i]->getAttack1Name() << endl;
+                pokemonFile1 << pokemon[i]->getAttack1Damage() << endl;
+                pokemonFile1 << pokemon[i]->getAttack2Name() << endl;
+                pokemonFile1 << pokemon[i]->getAttack2Damage() << endl;
+                pokemonFile1 << pokemon[i]->getEnergyReq() << endl;
+                // pokemonFile1 << "=====" << endl;
             }
-            pokemonFile.close();
+            pokemonFile1.close();
             i++;
             system("CLS");
             break;
