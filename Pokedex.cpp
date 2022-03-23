@@ -34,7 +34,9 @@ class Pokemon
     string m_name;
     string m_type;
     bool num = true;
+
 public:
+    Pokemon(){};
     void getPokemon();
     void setPokemon();
     string getName();
@@ -49,7 +51,7 @@ public:
     void editPokemon();
     void inputFail(int& input);
     void inputTextFormat(string& input1);
-    void readFromFile();
+    void readFromFile(int& i);
 };
 void Pokemon::getPokemon()
 {
@@ -270,32 +272,43 @@ void Pokemon::inputTextFormat(string& input1)
         } 
     }
 }
-void Pokemon::readFromFile()
+void Pokemon::readFromFile(int &i)
 {
     ifstream pokemonFile;
     pokemonFile.open("PokemonDatabase.txt");
-    // pokemonFile >> pokemonNum;
     // skip lines = to a multiple of i
-   /* for (int n = 1; n <= (n * i); n++)
+    for (int n = 1; n <= (9 * i); n++)
     {
         pokemonFile.ignore(256, '\n');
-    }*/
-    if (pokemonFile.fail())
+    }
+    cout << "file opened?" << endl;
+    if (pokemonFile.is_open())
     {
-        cout << "pokemonFile failed to open" << endl;
+        cout << "it stopped here..." << endl;
+        getline(pokemonFile, m_name);
+        cout << m_name << endl;
+        pokemonFile >> m_stage;
+        cout << m_stage << endl;
+        pokemonFile >> m_type;
+        cout << m_type << endl;
+        pokemonFile >> m_HP;
+        cout << m_HP << endl;
+        pokemonFile >> m_attack1Name;
+        cout << m_attack1Name << endl;
+        pokemonFile >> m_attack1;
+        cout << m_attack1 << endl;
+        pokemonFile >> m_attack2Name;
+        cout << m_attack2Name << endl;
+        pokemonFile >> m_attack2;
+        cout << m_attack2 << endl;
+        pokemonFile >> m_energyReq;
+        cout << m_energyReq << endl;
+        pokemonFile.close();
+        i++;
     }
     else
     {
-        getline(cin, m_name);
-        /*pokemonFile >> m_stage;
-        pokemonFile >> m_type;
-        pokemonFile >> m_HP;
-        pokemonFile >> m_attack1Name;
-        pokemonFile >> m_attack1;
-        pokemonFile >> m_attack2Name;
-        pokemonFile >> m_attack2;
-        pokemonFile >> m_energyReq;*/
-        pokemonFile.close();
+        cout << "pokemonFile failed to open" << endl;
     }
 }
 
@@ -306,21 +319,11 @@ int main()
     int i = 0, choice;
     string search;
     string edit;
+    cout << "howdy partner" << endl;
+    pokemon[i] = new Pokemon();
+    pokemon[i]->readFromFile(i);
     while (1)
     {
-        cout << "howdy partner" << endl;
-        /*pokemonFile1.open("PokemonDatabase.txt", ios::in);
-        {
-            pokemonFile1 >> i;
-            i -= 1;
-            pokemonFile1.close();
-        }*/
-       /* for (i; i <= 50; i++)
-        {
-            pokemon[i]->readFromFile(i);
-
-        }*/
-        pokemon[i]->readFromFile();
         cout << GRN << "\n\tMAIN MENU:\n" << RESET << endl;
         cout << "1. Create new Pokemon." << endl;
         cout << "2. Search for a Pokemon." << endl;
@@ -339,7 +342,7 @@ int main()
         case 1: 
             pokemon[i] = new Pokemon();
             pokemon[i]->setPokemon();
-            pokemonFile1.open("PokemonDatabase.txt", ios::out);
+            pokemonFile1.open("PokemonDatabase.txt", ios::app);
             if (pokemonFile1.fail())
             {
                 cout << "pokemonFile failed to open" << endl;
@@ -355,8 +358,7 @@ int main()
                 pokemonFile1 << pokemon[i]->getAttack1Damage() << endl;
                 pokemonFile1 << pokemon[i]->getAttack2Name() << endl;
                 pokemonFile1 << pokemon[i]->getAttack2Damage() << endl;
-                pokemonFile1 << pokemon[i]->getEnergyReq() << endl;
-                // pokemonFile1 << "=====" << endl;
+                pokemonFile1 << pokemon[i]->getEnergyReq() << endl; 
             }
             pokemonFile1.close();
             i++;
