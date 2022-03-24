@@ -1,9 +1,10 @@
 // Pokedex.cpp
-// began file creation 2 no sure what im doing....
+// began file creation 3 started loop in fill more than one pokemon. 
 
 
 // TODO:
 // add data write/read to/from a file so that Pokemon can be stored from one progam run to the next
+// pokedex full f() needs to be completed...
 
 #include <iostream>
 #include <string>
@@ -51,7 +52,7 @@ public:
     void editPokemon();
     void inputFail(int& input);
     void inputTextFormat(string& input1);
-    void readFromFile(int& i);
+    void readFromFile(unsigned short& i);
 };
 void Pokemon::getPokemon()
 {
@@ -272,19 +273,19 @@ void Pokemon::inputTextFormat(string& input1)
         } 
     }
 }
-void Pokemon::readFromFile(int &i)
+void Pokemon::readFromFile(unsigned short&i)
 {
     ifstream pokemonFile;
     pokemonFile.open("PokemonDatabase.txt");
-    // skip lines = to a multiple of i
+    // skip lines =to a multiple of i
     for (int n = 1; n <= (9 * i); n++)
     {
         pokemonFile.ignore(256, '\n');
+        if ((n % 9) == 0) cout << "We have skipped " << n / 9 << " Pokemon." << endl;
     }
-    cout << "file opened?" << endl;
     if (pokemonFile.is_open())
     {
-        cout << "it stopped here..." << endl;
+        cout << "Reading from the file into variables NOW." << endl;
         getline(pokemonFile, m_name);
         cout << m_name << endl;
         pokemonFile >> m_stage;
@@ -314,16 +315,53 @@ void Pokemon::readFromFile(int &i)
 
 int main()
 {
-    Pokemon* pokemon[50]{};
+    const int MAX {152};
+    Pokemon* pokemon[MAX]{};
+    //pokemon[MAX-1] = NULL;??
     fstream pokemonFile1;
-    int i = 0, choice;
+    unsigned short i = 0, choice{};
     string search;
     string edit;
-    cout << "howdy partner" << endl;
-    pokemon[i] = new Pokemon();
-    pokemon[i]->readFromFile(i);
+    unsigned short counter = 0;
+    cout << "Starting to read pokemon data into array." << endl;
+
+    ifstream pokemonReadFile;
+    pokemonReadFile.open("PokemonDatabase.txt");
+    int pokemonNum{};
+    while (!pokemonReadFile.eof())
+    {
+        getline(pokemonReadFile, name);
+        pokemonReadFile >> stage;
+        pokemonReadFile >> type;
+        pokemonReadFile >> HP;
+        pokemonReadFile >> attack1Name;
+        pokemonReadFile >> attack1;
+        pokemonReadFile >> attack2Name;
+        pokemonReadFile >> attack2;
+        pokemonReadFile >> energyReq;
+        pokemonNum++;
+        //read the # of lines from file
+    }
+    pokemonReadFile.close();
+
+    while ()
+    {
+        pokemon[i] = new Pokemon();
+        pokemon[i]->readFromFile(i);
+        counter++;
+        /*pokemon[i] = new Pokemon();
+        pokemon[i]->readFromFile(i);*/
+    }
+    
     while (1)
     {
+        // pokedex full f() needs to be completed...
+        if (i >= 151)
+        {
+            cout << "The Pokedex is full!" << endl;
+            return 0;
+        }
+
         cout << GRN << "\n\tMAIN MENU:\n" << RESET << endl;
         cout << "1. Create new Pokemon." << endl;
         cout << "2. Search for a Pokemon." << endl;
