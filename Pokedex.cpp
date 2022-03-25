@@ -1,10 +1,11 @@
 // Pokedex.cpp
-// began file creation 3 started loop in fill more than one pokemon. 
+// data read into program from file seems to work now. 
 
 
 // TODO:
-// add data write/read to/from a file so that Pokemon can be stored from one progam run to the next
-// pokedex full f() needs to be completed...
+// pokedex fill f() needs to be completed...
+// //remove testing cout code
+// add a "back" function that will let you exit any menu if you need to get back to the main menu. 
 
 #include <iostream>
 #include <string>
@@ -322,35 +323,62 @@ int main()
     unsigned short i = 0, choice{};
     string search;
     string edit;
-    unsigned short counter = 0;
-    cout << "Starting to read pokemon data into array." << endl;
-
+    int tempHP{};
+    string tempattack1Name;
+    string tempattack2Name;
+    int tempattack1{};
+    int tempattack2{};
+    int tempenergyReq{};
+    string tempstage;
+    string tempname;
+    string temptype;
+    int pokemonNum = 0;
+    cout << "Initiating file stream for read File." << endl;
     ifstream pokemonReadFile;
-    pokemonReadFile.open("PokemonDatabase.txt");
-    int pokemonNum{};
-    while (!pokemonReadFile.eof())
+    cout << "created read file." << endl;
+    pokemonReadFile.open("PokemonDatabase.txt", ios::in);
+    cout << "opened read file." << endl;
+    if (pokemonReadFile.is_open())
     {
-        getline(pokemonReadFile, name);
-        pokemonReadFile >> stage;
-        pokemonReadFile >> type;
-        pokemonReadFile >> HP;
-        pokemonReadFile >> attack1Name;
-        pokemonReadFile >> attack1;
-        pokemonReadFile >> attack2Name;
-        pokemonReadFile >> attack2;
-        pokemonReadFile >> energyReq;
-        pokemonNum++;
-        //read the # of lines from file
+        cout << "inside if statement." << endl;
+        while (pokemonReadFile.peek()!=EOF)
+        {
+            getline(pokemonReadFile, tempname);
+            cout << "peek = " << pokemonReadFile.peek() << endl;
+            getline(pokemonReadFile, tempstage);
+            cout << "peek = " << pokemonReadFile.peek() << endl;
+            getline(pokemonReadFile, temptype);
+            cout << "type peek = " << pokemonReadFile.peek() << endl;
+            pokemonReadFile >> tempHP;
+            cout << "HP peek = " << pokemonReadFile.peek() << endl;
+            pokemonReadFile.clear(256, '\n');
+            getline(pokemonReadFile, tempattack1Name);
+            cout << "attack 1 Name peek = " << pokemonReadFile.peek() << endl;
+            pokemonReadFile >> tempattack1;
+            cout << "attack 1 damage peek = " << pokemonReadFile.peek() << endl;
+            pokemonReadFile.clear(256, '\n');
+            getline(pokemonReadFile, tempattack2Name);
+            cout << "peek = " << pokemonReadFile.peek() << endl;
+            pokemonReadFile >> tempattack2;
+            cout << "peek = " << pokemonReadFile.peek() << endl;
+            pokemonReadFile >> tempenergyReq;
+            pokemonReadFile.clear(256, '\n');
+            cout <<"peek = "<< pokemonReadFile.peek() << endl;
+            pokemonNum++;
+            cout <<"Number of pokemon "<< pokemonNum << endl;
+        }
+        cout << "We counted " << pokemonNum << " pokemon in the storage file." << endl;
+        pokemonReadFile.close();
     }
-    pokemonReadFile.close();
-
-    while ()
+    else
     {
+        cout << "pokemonReadFile failed to open" << endl;
+    }
+    for(int a = 1; a <= pokemonNum; a++)
+    {
+        cout << "Starting to read pokemon data into array." << endl;
         pokemon[i] = new Pokemon();
         pokemon[i]->readFromFile(i);
-        counter++;
-        /*pokemon[i] = new Pokemon();
-        pokemon[i]->readFromFile(i);*/
     }
     
     while (1)
@@ -417,7 +445,7 @@ int main()
                 {
                     if (pokemon[j]->getName() == search)
                     {
-                        cout << "\n**********\nWe found it!!\n**********" << endl;
+                        cout << "\n**********\nWe found "<< pokemon[j]->getName()<< "!!\n**********" << endl;
                         pokemon[j]->getPokemon();
                         break;
                     }
