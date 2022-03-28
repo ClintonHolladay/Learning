@@ -1,6 +1,5 @@
 // Pokedex.cpp
-// data read into program from file seems to (actually...) work now. 
-// changed myFile.clear() to myFile.ignore()
+// moved pokedex full code to where it needs to be.
 
 
 // TODO:
@@ -285,24 +284,29 @@ void Pokemon::readFromFile(unsigned short&i)
     for (int n = 1; n <= (9 * i); n++)
     {
         pokemonFile.ignore(256, '\n');
-        if ((n % 9) == 0) cout << "--We have skipped " << n / 9 << " Pokemon." << endl;
+        if (n == (9 * i))
+        {
+            if ((n % 9) == 0) cout << "--We have skipped " << n / 9 << " Pokemon." << endl;
+        }
     }
     if (pokemonFile.is_open())
     {
         cout << "--Reading from the file into variables NOW." << endl;
         getline(pokemonFile, m_name);
         cout << m_name << endl;
-        pokemonFile >> m_stage;
+        getline(pokemonFile, m_stage);
         cout << m_stage << endl;
-        pokemonFile >> m_type;
+        getline(pokemonFile, m_type);
         cout << m_type << endl;
         pokemonFile >> m_HP;
         cout << m_HP << endl;
-        pokemonFile >> m_attack1Name;
+        pokemonFile.ignore(256, '\n');
+        getline(pokemonFile, m_attack1Name);
         cout << m_attack1Name << endl;
         pokemonFile >> m_attack1;
         cout << m_attack1 << endl;
-        pokemonFile >> m_attack2Name;
+        pokemonFile.ignore(256, '\n');
+        getline(pokemonFile, m_attack2Name);
         cout << m_attack2Name << endl;
         pokemonFile >> m_attack2;
         cout << m_attack2 << endl;
@@ -378,13 +382,6 @@ int main()
     
     while (1)
     {
-        // pokedex full f() needs to be completed...
-        if (i >= 151)
-        {
-            cout << "The Pokedex is full!" << endl;
-            return 0;
-        }
-
         cout << GRN << "\n\tMAIN MENU:\n" << RESET << endl;
         cout << "1. Create new Pokemon." << endl;
         cout << "2. Search for a Pokemon." << endl;
@@ -401,7 +398,14 @@ int main()
         }
         switch (choice)
         {
-        case 1: //Create f()
+        case 1: //Create new Pokemon f()
+            if (i > 151)
+            {
+                cout << "The Pokedex is full! You cannot add anymore Pokemon.\n"
+                    <<" If you have found a new type of Pokemon then you need to\n"
+                    <<" fine professor Oak and infor him!he can hehp you further!" << endl;
+                break;
+            }
             pokemon[i] = new Pokemon();
             pokemon[i]->setPokemon();
             pokemonFile1.open("PokemonDatabase.txt", ios::app);
