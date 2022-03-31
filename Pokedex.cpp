@@ -1,13 +1,13 @@
 // Pokedex.cpp
-// fixed dataFile error
-// editing the old txt file will not work, need to make a new one and delete the old one then remane the new one.  
+// made a new temp file and read all pokemon into it and then deleted the old file and then nemaned the temp file back to the original file name.  
+
 
 
 // TODO:
 // pokedex fill f() needs to be completed...
 // remove testing cout code
 // add a "back" function that will let you exit any menu if you need to get back to the main menu. 
-// add a delete pokemon option 
+// add a delete pokemon option
 
 
 #include <iostream>
@@ -480,51 +480,33 @@ int main()
                         cout << "You may now choose different info.\n" << endl;
                         pokemon[k]->editPokemon();
                         fstream pokemonFile2;
-                        cout << "pokemonFile2 created" << endl;
-                        pokemonFile2.open(dataFile);
-                        if (pokemonFile2.fail())
+                        pokemonFile1.open("temp.txt", ios::app);
+                        if (pokemonFile1.fail())
                         {
-                            cout << "***ERROR*** PokemonFile2 for editing failed to open! ***ERROR***" << endl;
+                            cout << "***ERROR*** Temp File failed to open! ***ERROR***" << endl;
                         }
                         else
                         {
-                            cout << "dataFile open" << endl;
-                            string compare = "notit";
-                            int counter{};
-                            while (compare != edit)
+                            cout << "Temp File open" << endl;
+                            for (int j = 0; j < i; j++)
                             {
-                                getline(pokemonFile2, compare);
-                                counter++;
-                                cout << "sreaching -> " << compare << endl;
-                                if (compare == edit)
-                                {
-                                    cout << "creating output stream for editing text file " << endl;
-                                    fstream pokemonFile3;
-                                    cout << "pokemonFile3 created" << endl;
-                                    pokemonFile3.open(dataFile, ios::in);
-                                    if (pokemonFile3.fail())
-                                    {
-                                        cout << "***ERROR*** PokemonFile3 for editing failed to open! ***ERROR***" << endl;
-                                    }
-                                    else
-                                    {
-                                        cout << "dataFile open again" << endl;
-                                        cout << "counter is " << counter << endl;
-                                        for(int i = 1; i<= counter; i++)
-                                        {
-                                            pokemonFile3.ignore(256, '\n');
-                                        }
-                                        cout << pokemon[k]->getName() << endl;
-                                        pokemonFile3 << pokemon[k]->getName();
-                                        pokemonFile3.close();
-                                        pokemonFile2.close();
-                                        // make an new temp file and read all pokemon into it and then make it the new file and nemane it.  
-                                        //remove("PokemonDatabase.txt");
-                                    }
-                                }
+                                pokemonFile1 << pokemon[j]->getName() << endl;
+                                pokemonFile1 << pokemon[j]->getStage() << endl;
+                                pokemonFile1 << pokemon[j]->getType() << endl;
+                                pokemonFile1 << pokemon[j]->getHP() << endl;
+                                pokemonFile1 << pokemon[j]->getAttack1Name() << endl;
+                                pokemonFile1 << pokemon[j]->getAttack1Damage() << endl;
+                                pokemonFile1 << pokemon[j]->getAttack2Name() << endl;
+                                pokemonFile1 << pokemon[j]->getAttack2Damage() << endl;
+                                pokemonFile1 << pokemon[j]->getEnergyReq() << endl;
+                                cout << "end of input for loop" << endl;
                             }
+                            pokemonFile1.close();
+                            remove("PokemonDatabase.txt");
+                            rename("temp.txt", "PokemonDatabase.txt");
+                            cout << "file closed." << endl;
+                            break;
                         }
-                        break;
                     }
                     else if (k == i - 1)
                     {
