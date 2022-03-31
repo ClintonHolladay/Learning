@@ -1,19 +1,20 @@
 // Pokedex.cpp
-// made a new temp file and read all pokemon into it and then deleted the old file and then nemaned the temp file back to the original file name.  
-
+// pokedex fill f() completed and removed testing cout code
+// updated inputTextFormat() to not abort the program if user inputs ENTER key as an input
 
 
 // TODO:
-// pokedex fill f() needs to be completed...
-// remove testing cout code
+// Add start of game
 // add a "back" function that will let you exit any menu if you need to get back to the main menu. 
 // add a delete pokemon option
+// when creating a new pokemon stop user if that name has already been used
 
 
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <fstream>
+#include <windows.h>
 
 #define RED   "\x1B[31m"
 #define GRN   "\x1B[32m"
@@ -256,6 +257,10 @@ void Pokemon::inputFail(int& input)
 void Pokemon::inputTextFormat(string& input1)
 {
     getline(cin, input1);
+    while (input1.empty())
+    {
+        getline(cin, input1);
+    }
     while (input1[0] == ' ')
     {
         input1.erase(0, 1);
@@ -284,40 +289,30 @@ void Pokemon::readFromFile(unsigned short&i, string& DataFile)
     for (int n = 1; n <= (9 * i); n++)
     {
         pokemonFile.ignore(256, '\n');
-        if (n == (9 * i))
+        /*if (n == (9 * i))
         {
             if ((n % 9) == 0) cout << "--We have skipped " << n / 9 << " Pokemon." << endl;
-        }
+        }*/
     }
     if (pokemonFile.is_open())
     {
-        cout << "--Reading from the file into variables NOW." << endl;
         getline(pokemonFile, m_name);
-        cout << m_name << endl;
         getline(pokemonFile, m_stage);
-        cout << m_stage << endl;
         getline(pokemonFile, m_type);
-        cout << m_type << endl;
         pokemonFile >> m_HP;
-        cout << m_HP << endl;
         pokemonFile.ignore(256, '\n');
         getline(pokemonFile, m_attack1Name);
-        cout << m_attack1Name << endl;
         pokemonFile >> m_attack1;
-        cout << m_attack1 << endl;
         pokemonFile.ignore(256, '\n');
         getline(pokemonFile, m_attack2Name);
-        cout << m_attack2Name << endl;
         pokemonFile >> m_attack2;
-        cout << m_attack2 << endl;
         pokemonFile >> m_energyReq;
-        cout << m_energyReq << endl;
         pokemonFile.close();
         //i++;
     }
     else
     {
-        cout << "***ERROR*** PokemonFile failed to open! ***ERROR***" << endl;
+        cout << "***ERROR*** PokemonFile in void Pokemon::readFromFile() failed to open! ***ERROR***" << endl;
     }
 }
 
@@ -342,14 +337,10 @@ int main()
     int pokemonNum = 0;
     string dataFile = "PokemonDatabase.txt";
 
-    cout << "--Initiating file stream for read File." << endl;
     ifstream pokemonReadFile;
-    cout << "--Created read file." << endl;
     pokemonReadFile.open(dataFile, ios::in);
-    cout << "--Opened read file." << endl;
     if (pokemonReadFile.is_open())
     {
-        cout << "--Inside if open statement to count pokemon." << endl;
         while (pokemonReadFile.peek()!=EOF)
         {
             getline(pokemonReadFile, tempname);
@@ -365,7 +356,6 @@ int main()
             pokemonReadFile >> tempenergyReq;
             pokemonReadFile.ignore(256, '\n');
             pokemonNum++;
-            cout <<"--Number of pokemon "<< pokemonNum << endl;
         }
         cout << "--We counted " << pokemonNum << " pokemon in the storage file." << endl;
         pokemonReadFile.close();
@@ -374,7 +364,6 @@ int main()
     {
         cout << "***ERROR*** PokemonReadFile failed to open! ***ERROR***" << endl;
     }
-    cout << "--Entering (for loop) Starting to read pokemon data into array." << endl;
     for(int a = 1; a <= pokemonNum; a++)
     {
         pokemon[i] = new Pokemon();
@@ -388,7 +377,8 @@ int main()
         cout << "1. Create new Pokemon." << endl;
         cout << "2. Search for a Pokemon." << endl;
         cout << "3. Edit info for a Pokemon." << endl;
-        cout << "4. Exit." << endl;
+        cout << "4. Play Game!" << endl;
+        cout << "5. Exit." << endl;
         cout << "\nThere are currently " << i << " Pokemon in the Data Base." << endl;
         cin >> choice;
         if (cin.fail())
@@ -474,12 +464,11 @@ int main()
                 {
                     if (pokemon[k]->getName() == edit)
                     {
-                        cout << "\n**********\nWe found it!!\n**********" << endl;
+                        cout << "\n**********\nWe found "<< edit << "!!\n**********" << endl;
                         cout << "This Pokemon's current info is:\n" << endl;
                         pokemon[k]->getPokemon();
                         cout << "You may now choose different info.\n" << endl;
                         pokemon[k]->editPokemon();
-                        fstream pokemonFile2;
                         pokemonFile1.open("temp.txt", ios::app);
                         if (pokemonFile1.fail())
                         {
@@ -504,7 +493,7 @@ int main()
                             pokemonFile1.close();
                             remove("PokemonDatabase.txt");
                             rename("temp.txt", "PokemonDatabase.txt");
-                            cout << "file closed." << endl;
+                            cout << "file closed and names swapped." << endl;
                             break;
                         }
                     }
@@ -516,10 +505,11 @@ int main()
                 }
             }
             break;
+        case 4:
+            //Game
 
-        // add a delete pokemon option
-
-        case 4: //Exit
+            break;
+        case 5: //Exit
             cout << "GOODBYE!!!" << endl;
             exit(0);
         default: cout << endl << "Invalid Answer!!! Try again." << endl;
