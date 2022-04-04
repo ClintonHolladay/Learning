@@ -1,6 +1,5 @@
 // Pokedex.cpp
-// pokedex fill f() completed and removed testing cout code
-// updated inputTextFormat() to not abort the program if user inputs ENTER key as an input
+// Minor changes
 
 
 // TODO:
@@ -357,7 +356,7 @@ int main()
             pokemonReadFile.ignore(256, '\n');
             pokemonNum++;
         }
-        cout << "--We counted " << pokemonNum << " pokemon in the storage file." << endl;
+        //cout << "--We counted " << pokemonNum << " pokemon in the storage file." << endl;
         pokemonReadFile.close();
     }
     else
@@ -391,7 +390,7 @@ int main()
         switch (choice)
         {
         case 1: //Create new Pokemon f()
-            if (i > 151)
+            if (i > 150)
             {
                 cout << "The Pokedex is full! You cannot add anymore Pokemon.\n"
                     <<" If you have found a new type of Pokemon then you need to\n"
@@ -476,7 +475,7 @@ int main()
                         }
                         else
                         {
-                            cout << "Temp File open" << endl;
+                            //cout << "Temp File open" << endl;
                             for (int j = 0; j < i; j++)
                             {
                                 pokemonFile1 << pokemon[j]->getName() << endl;
@@ -488,12 +487,12 @@ int main()
                                 pokemonFile1 << pokemon[j]->getAttack2Name() << endl;
                                 pokemonFile1 << pokemon[j]->getAttack2Damage() << endl;
                                 pokemonFile1 << pokemon[j]->getEnergyReq() << endl;
-                                cout << "end of input for loop" << endl;
+                                //cout << "end of input for loop" << endl;
                             }
                             pokemonFile1.close();
                             remove("PokemonDatabase.txt");
                             rename("temp.txt", "PokemonDatabase.txt");
-                            cout << "file closed and names swapped." << endl;
+                            //cout << "file closed and names swapped." << endl;
                             break;
                         }
                     }
