@@ -1,5 +1,15 @@
-// Pokedex.cpp
-// Minor changes
+// Pokedex.cpp 
+// Written on a Windows computer using Visual Studio Community 2022.
+
+/* Pokedex is supposed to allow the user to create up to 151 pokemon and store them in a .txt file for future use. 
+Every time you open the program the file is read into the program and you can search for and edit any pokemon that 
+you like and then the file will be updated and you can access these modifications at a later date. The program takes 
+a small range of user input and formats this input to a standard. Therefore the user does not have to worry about 
+case sensitivity and spaces etc. The program also limits the input names to a range that is applicable to "Pokemon". 
+If anything else is recieved then the user is prompted to try again and given some feed \back on the available 
+options that the program is looking for. */
+
+// HAVEDONE: 
 
 
 // TODO:
@@ -7,7 +17,6 @@
 // add a "back" function that will let you exit any menu if you need to get back to the main menu. 
 // add a delete pokemon option
 // when creating a new pokemon stop user if that name has already been used
-
 
 #include <iostream>
 #include <string>
