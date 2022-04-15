@@ -1,5 +1,5 @@
 // Pokedex.cpp 
-// Written on a Windows computer using Visual Studio Community 2022.
+// Written using Visual Studio Community 2022.
 
 /* Pokedex is supposed to allow the user to create up to 151 pokemon and store them in a .txt file for future use. 
 Every time you open the program the file is read into the program and you can search for and edit any pokemon that 
@@ -10,13 +10,16 @@ If anything else is recieved then the user is prompted to try again and given so
 options that the program is looking for. */
 
 // HAVEDONE: 
+// Added try catch block to new heap allocation in case new key word fails. because i saw it in a tutorial...
 
 
 // TODO:
+// put more of the Main() into functions
 // Add start of game
-// add a "back" function that will let you exit any menu if you need to get back to the main menu. 
-// add a delete pokemon option
-// when creating a new pokemon stop user if that name has already been used
+// Add a "back" function that will let you exit any menu if you need to get back to the main menu. 
+// Add a delete pokemon option
+// When creating a new pokemon stop user if that name has already been used
+// Add a MAIN menu option to display All current pokemon on the screen
 
 #include <iostream>
 #include <string>
@@ -374,9 +377,16 @@ int main()
     }
     for(int a = 1; a <= pokemonNum; a++)
     {
-        pokemon[i] = new Pokemon();
-        pokemon[i]->readFromFile(i, dataFile);
-        i++;
+        try
+        {
+            pokemon[i] = new Pokemon();
+            pokemon[i]->readFromFile(i, dataFile);
+            i++;
+        }
+        catch (exception& ex)
+        {
+            cout << "Something went wrong while creating pokemon during file reading into the program." << ex.what() << endl;
+        }
     }
     
     while (1)
@@ -406,7 +416,14 @@ int main()
                     <<" fine professor Oak and infor him!he can hehp you further!" << endl;
                 break;
             }
-            pokemon[i] = new Pokemon();
+            try
+            {
+                pokemon[i] = new Pokemon();
+            }
+            catch (exception& ex)
+            {
+                cout << "Something went wrong while creating pokemon during file reading into the program." << ex.what() << endl;
+            }
             pokemon[i]->setPokemon();
             pokemonFile1.open(dataFile, ios::app);
             if (pokemonFile1.fail())
