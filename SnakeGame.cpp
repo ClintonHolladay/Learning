@@ -9,13 +9,16 @@ const int MaxY{ 15 };
 char GameBoard[MaxY][MaxX];
 int TailX[50];
 int TailY[50];
+int temp1X{};
+int temp1Y{};
+int temp2X{};
+int temp2Y{};
 int prevSnakeX{};
 int prevSnakeY{};
 int foodY{};
 int foodX{};
 int snakeX = (MaxX -1) / 2;
 int snakeY = (MaxY -1) / 2;
-int score{ 0 };
 int tail{ 0 };
 char input{0};
 enum Movement { UP = 72, LEFT = 75, RIGHT = 77, DOWN = 80 };
@@ -31,12 +34,17 @@ void SetBoard()
 			else GameBoard[i][j] = ' ';
 		}
 	}
-	GameBoard[snakeY][snakeX] = 'O';
+	GameBoard[snakeY][snakeX] = 'O'; 
 }
 void DrawBoard()
 {
 	system("CLS");
 	GameBoard[foodY][foodX] = 'X';
+	if (tail)
+	{
+		for (int i = (tail - 1); i < tail; i++)
+			GameBoard[TailY[i]][TailX[i]] = 'o';
+	}
 	GameBoard[snakeY][snakeX] = 'O';
 	for (int i = 0; i < MaxY; i++)
 	{
@@ -46,52 +54,76 @@ void DrawBoard()
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "Score: " << score;
+	std::cout << "Score: " << tail;
 }
 void GetUserInput()
 {
 	if (_kbhit()) input = _getch();
-	//if (input) GameBoard[snakeY][snakeX] = ' ';
 }
 void GameLogic()
 {
-	if (input)
+	if (tail)
 	{
-		GameBoard[snakeY][snakeX] = ' ';
-		prevSnakeX = snakeX;
-		prevSnakeY = snakeY;
-		GameBoard[TailY[0]][TailX[0]] = 'o';
-		/*if (tail > 0)
+		for (int i = 0; i < tail; i++)
 		{
-			for (int i = (tail - 1); i < tail; i++)
-				GameBoard[TailY[i]][TailX[i]] = 'o';
-		}*/
+			if (i == 0)
+			{
+				temp1X = TailX[i];
+				temp1Y = TailY[i];
+				TailX[i] = snakeX;
+				TailY[i] = snakeY;
+				continue;
+			}
+			else if (i % 2)
+			{
+				temp2X = TailX[i];
+				temp2Y = TailY[i];
+				TailX[i] = temp1X;
+				TailY[i] = temp1Y;
+				continue;
+			}
+			else
+			{
+				temp1X = TailX[i];
+				temp1Y = TailY[i];
+				TailX[i] = temp2X;
+				TailY[i] = temp2Y;
+			}
+			/*GameBoard[TailY[i]][TailX[i]] = ' ';
+			GameBoard[TailY[i]][TailX[i]] = 'o';*/
+		}
 	}
 	switch (input)
 	{
 	case UP:
-		--snakeY; break;
+		--snakeY;
+		break;
 	case LEFT:
-		--snakeX; break;
+		--snakeX;
+		break;
 	case RIGHT:
-		++snakeX; break;
+		++snakeX;
+		break;
 	case DOWN:
-		++snakeY; break;
+		++snakeY;
+		break;
 	default: break;
 	}
+	if (snakeY == foodY && snakeX == foodX)
+	{
+		foodY = (rand() % (MaxY - 2) + 1);
+		foodX = (rand() % (MaxX - 2) + 1);
+		++tail;
+		/*TailX[tail] = prevSnakeX;
+		TailY[tail] = prevSnakeY;
+		GameBoard[TailY[0]][TailX[0]] = 'o';*/
+	}
+	// code for running into the walls
 	if (snakeX == MaxX - 1) snakeX = 1;
 	if (snakeX == 0) snakeX = MaxX - 2;
 	if (snakeY == MaxY - 1) snakeY = 1;
 	if (snakeY == 0)snakeY = MaxY - 2;
-	if (snakeY == foodY && snakeX == foodX)
-	{
-		++score;
-		foodY = (rand() % (MaxY - 2) + 1);
-		foodX = (rand() % (MaxX - 2) + 1);
-		++tail;
-		TailX[0] = prevSnakeX;
-		TailY[0] = prevSnakeY;
-	}
+	
 }
 
 int main()
@@ -108,4 +140,3 @@ int main()
 		Sleep(50);
 	}
 }
-
