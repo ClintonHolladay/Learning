@@ -39,10 +39,14 @@ void SetBoard()
 void DrawBoard()
 {
 	system("CLS");
+	GameBoard[prevSnakeY][prevSnakeX] = ' ';
+	//GameBoard[TailY[tail - 1]][TailX[tail - 1]] = ' ';
+	/*for (int i = (tail - 1); i < tail; i++)
+		GameBoard[TailY[i]][TailX[i]] = ' ';*/
 	GameBoard[foodY][foodX] = 'X';
 	if (tail)
 	{
-		for (int i = (tail - 1); i < tail; i++)
+		for (int i = 0; i < tail; i++)
 			GameBoard[TailY[i]][TailX[i]] = 'o';
 	}
 	GameBoard[snakeY][snakeX] = 'O';
@@ -64,6 +68,9 @@ void GameLogic()
 {
 	if (tail)
 	{
+		GameBoard[TailY[tail -1]][TailX[tail-1]] = ' ';
+		/*for (int i = (tail - 1); i < tail; i++)
+			GameBoard[TailY[i]][TailX[i]] = ' ';*/
 		for (int i = 0; i < tail; i++)
 		{
 			if (i == 0)
@@ -89,10 +96,10 @@ void GameLogic()
 				TailX[i] = temp2X;
 				TailY[i] = temp2Y;
 			}
-			/*GameBoard[TailY[i]][TailX[i]] = ' ';
-			GameBoard[TailY[i]][TailX[i]] = 'o';*/
 		}
 	}
+	prevSnakeX = snakeX;
+	prevSnakeY = snakeY;
 	switch (input)
 	{
 	case UP:
@@ -114,9 +121,6 @@ void GameLogic()
 		foodY = (rand() % (MaxY - 2) + 1);
 		foodX = (rand() % (MaxX - 2) + 1);
 		++tail;
-		/*TailX[tail] = prevSnakeX;
-		TailY[tail] = prevSnakeY;
-		GameBoard[TailY[0]][TailX[0]] = 'o';*/
 	}
 	// code for running into the walls
 	if (snakeX == MaxX - 1) snakeX = 1;
