@@ -20,7 +20,7 @@ int foodX{};
 int snakeX = (MaxX -1) / 2;
 int snakeY = (MaxY -1) / 2;
 int tail{ 0 };
-char input{0};
+char input{};
 enum Movement { UP = 72, LEFT = 75, RIGHT = 77, DOWN = 80 };
 bool GameOn{ true };
 
@@ -39,10 +39,7 @@ void SetBoard()
 void DrawBoard()
 {
 	system("CLS");
-	GameBoard[prevSnakeY][prevSnakeX] = ' ';
-	//GameBoard[TailY[tail - 1]][TailX[tail - 1]] = ' ';
-	/*for (int i = (tail - 1); i < tail; i++)
-		GameBoard[TailY[i]][TailX[i]] = ' ';*/
+	if(input) GameBoard[prevSnakeY][prevSnakeX] = ' ';
 	GameBoard[foodY][foodX] = 'X';
 	if (tail)
 	{
@@ -69,8 +66,6 @@ void GameLogic()
 	if (tail)
 	{
 		GameBoard[TailY[tail -1]][TailX[tail-1]] = ' ';
-		/*for (int i = (tail - 1); i < tail; i++)
-			GameBoard[TailY[i]][TailX[i]] = ' ';*/
 		for (int i = 0; i < tail; i++)
 		{
 			if (i == 0)
@@ -100,6 +95,7 @@ void GameLogic()
 	}
 	prevSnakeX = snakeX;
 	prevSnakeY = snakeY;
+
 	switch (input)
 	{
 	case UP:
@@ -116,11 +112,19 @@ void GameLogic()
 		break;
 	default: break;
 	}
+	// if eat self GAME OVER
+	for (int i = 1; i < tail; i++)
+	{
+		if (snakeX == TailX[i] && snakeY == TailY[i]) GameOn = false;
+	}
+	// Food regeneration
 	if (snakeY == foodY && snakeX == foodX)
 	{
 		foodY = (rand() % (MaxY - 2) + 1);
 		foodX = (rand() % (MaxX - 2) + 1);
 		++tail;
+		/*TailX[0] = snakeX;
+		TailY[0] = snakeY;*/
 	}
 	// code for running into the walls
 	if (snakeX == MaxX - 1) snakeX = 1;
@@ -132,15 +136,16 @@ void GameLogic()
 
 int main()
 {
-	srand(time(NULL));
-	foodY = rand() % (MaxY -1);
-	foodX = rand() % (MaxX -1);
+	srand((unsigned)time(NULL));
+	foodY = (rand() % (MaxY - 2) + 1);
+	foodX = (rand() % (MaxX - 2) + 1);
 	SetBoard();
 	while (GameOn)
 	{
 		DrawBoard();
 		GetUserInput();
 		GameLogic();
-		Sleep(50);
+		Sleep(15);
 	}
+	std::cout << "\n\nGAME OVER!!!" << std::endl;
 }
