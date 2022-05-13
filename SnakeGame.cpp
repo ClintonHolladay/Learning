@@ -21,8 +21,13 @@ int snakeX = (MaxX -1) / 2;
 int snakeY = (MaxY -1) / 2;
 int tail{ 0 };
 char input{};
+//char prevInput{};
 enum Movement { UP = 72, LEFT = 75, RIGHT = 77, DOWN = 80 };
 bool GameOn{ true };
+bool amGoingDown{ false };
+bool amGoingUp{ false };
+bool amGoingLeft{ false };
+bool amGoingRight{ false };
 
 void SetBoard()
 {
@@ -59,7 +64,41 @@ void DrawBoard()
 }
 void GetUserInput()
 {
+	//prevInput = input;
 	if (_kbhit()) input = _getch();
+
+	// if you reverse direction you die
+	if (tail)
+	{
+		switch (input)
+		{
+		case UP:
+			if (amGoingDown) GameOn = false;
+			amGoingLeft = false;
+			amGoingRight = false;
+			amGoingUp = true;
+			break;
+		case LEFT:
+			if (amGoingRight) GameOn = false;
+			amGoingLeft = true;
+			amGoingDown = false;
+			amGoingUp = false;
+			break;
+		case RIGHT:
+			if (amGoingLeft) GameOn = false;
+			amGoingDown = false;
+			amGoingRight = true;
+			amGoingUp = false;
+			break;
+		case DOWN:
+			if (amGoingUp) GameOn = false;
+			amGoingLeft = false;
+			amGoingRight = false;
+			amGoingDown = true;
+			break;
+		default: break;
+		}
+	}
 }
 void GameLogic()
 {
@@ -95,38 +134,49 @@ void GameLogic()
 	}
 	prevSnakeX = snakeX;
 	prevSnakeY = snakeY;
-
 	switch (input)
 	{
 	case UP:
+		//if (prevInput == DOWN) GameOn = false;
 		--snakeY;
+		/*if (tail)
+		{
+			if (prevSnakeY == (snakeY + 1) && prevSnakeX == snakeX)
+			{
+				GameOn = false;
+			}
+		}*/
 		break;
 	case LEFT:
+		//if (prevInput == RIGHT) GameOn = false;
 		--snakeX;
 		break;
 	case RIGHT:
+		//if (prevInput == LEFT) GameOn = false;
 		++snakeX;
 		break;
 	case DOWN:
+		//if (prevInput == UP) GameOn = false;
 		++snakeY;
 		break;
 	default: break;
 	}
-	// if eat self GAME OVER
+	// if you eat yourself GAME OVER
 	for (int i = 1; i < tail; i++)
 	{
 		if (snakeX == TailX[i] && snakeY == TailY[i]) GameOn = false;
 	}
-	// Food regeneration
+	// If food is eaten
 	if (snakeY == foodY && snakeX == foodX)
 	{
 		foodY = (rand() % (MaxY - 2) + 1);
 		foodX = (rand() % (MaxX - 2) + 1);
 		++tail;
-		/*TailX[0] = snakeX;
-		TailY[0] = snakeY;*/
+		if (tail == 50) GameOn = false;
+		TailX[tail - 1] = prevSnakeX;
+		TailY[tail - 1] = prevSnakeY;
 	}
-	// code for running into the walls
+	// when running into the walls pop out the other side
 	if (snakeX == MaxX - 1) snakeX = 1;
 	if (snakeX == 0) snakeX = MaxX - 2;
 	if (snakeY == MaxY - 1) snakeY = 1;
