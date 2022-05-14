@@ -7,8 +7,9 @@
 const int MaxX{ 30 };
 const int MaxY{ 15 };
 char GameBoard[MaxY][MaxX];
-int TailX[50];
-int TailY[50];
+const int max{ 50 };
+int TailX[max];
+int TailY[max];
 int temp1X{};
 int temp1Y{};
 int temp2X{};
@@ -21,7 +22,6 @@ int snakeX = (MaxX -1) / 2;
 int snakeY = (MaxY -1) / 2;
 int tail{ 0 };
 char input{};
-//char prevInput{};
 enum Movement { UP = 72, LEFT = 75, RIGHT = 77, DOWN = 80 };
 bool GameOn{ true };
 bool amGoingDown{ false };
@@ -31,6 +31,9 @@ bool amGoingRight{ false };
 
 void SetBoard()
 {
+	srand((unsigned)time(NULL));
+	foodY = (rand() % (MaxY - 2) + 1);
+	foodX = (rand() % (MaxX - 2) + 1);
 	for (int i = 0; i < MaxY; i++)
 	{
 		for (int j = 0; j < MaxX; j++)
@@ -64,10 +67,10 @@ void DrawBoard()
 }
 void GetUserInput()
 {
-	//prevInput = input;
 	if (_kbhit()) input = _getch();
 
-	// if you reverse direction you die
+	// if you reverse direction you die, 
+			// this is the only way out of 4 attempts that i could get to work immediately upon reversal. 
 	if (tail)
 	{
 		switch (input)
@@ -102,6 +105,9 @@ void GetUserInput()
 }
 void GameLogic()
 {
+	// move tail along the board behind the head.
+	// this could probably be inproved because i think as it is now if you were to pause the game 
+			// the tail would dissapear. but maybe not and it is functional...
 	if (tail)
 	{
 		GameBoard[TailY[tail -1]][TailX[tail-1]] = ' ';
@@ -132,41 +138,31 @@ void GameLogic()
 			}
 		}
 	}
-	prevSnakeX = snakeX;
+	prevSnakeX = snakeX; // not sure if these are necissary or not...
 	prevSnakeY = snakeY;
 	switch (input)
 	{
 	case UP:
-		//if (prevInput == DOWN) GameOn = false;
 		--snakeY;
-		/*if (tail)
-		{
-			if (prevSnakeY == (snakeY + 1) && prevSnakeX == snakeX)
-			{
-				GameOn = false;
-			}
-		}*/
 		break;
 	case LEFT:
-		//if (prevInput == RIGHT) GameOn = false;
 		--snakeX;
 		break;
 	case RIGHT:
-		//if (prevInput == LEFT) GameOn = false;
 		++snakeX;
 		break;
 	case DOWN:
-		//if (prevInput == UP) GameOn = false;
 		++snakeY;
 		break;
 	default: break;
 	}
 	// if you eat yourself GAME OVER
-	for (int i = 1; i < tail; i++)
-	{
-		if (snakeX == TailX[i] && snakeY == TailY[i]) GameOn = false;
-	}
-	// If food is eaten
+		for (int i = 1; i < tail; i++)
+		{
+			if (snakeX == TailX[i] && snakeY == TailY[i]) GameOn = false;
+		}
+	
+	// if food is eaten
 	if (snakeY == foodY && snakeX == foodX)
 	{
 		foodY = (rand() % (MaxY - 2) + 1);
@@ -183,12 +179,8 @@ void GameLogic()
 	if (snakeY == 0)snakeY = MaxY - 2;
 	
 }
-
 int main()
 {
-	srand((unsigned)time(NULL));
-	foodY = (rand() % (MaxY - 2) + 1);
-	foodX = (rand() % (MaxX - 2) + 1);
 	SetBoard();
 	while (GameOn)
 	{
