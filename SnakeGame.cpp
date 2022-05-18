@@ -1,4 +1,11 @@
-// SnakeGame.cpp
+// SnakeGame.cpp 
+
+// Use the arrows to move the snake around the board. 
+// Try to eat the 'X' that randomly gererates. 
+// Grow your tail as long as you can! 
+// If you reverse back onto yourself you will die. 
+// If you run into you self you will die. 
+// If you run into a wall you will pop back out of the other side.
 
 #include <iostream>
 #include <conio.h>
@@ -138,7 +145,7 @@ void GameLogic()
 			}
 		}
 	}
-	prevSnakeX = snakeX; // not sure if these are necissary or not...
+	prevSnakeX = snakeX;
 	prevSnakeY = snakeY;
 	switch (input)
 	{
@@ -168,7 +175,13 @@ void GameLogic()
 		foodY = (rand() % (MaxY - 2) + 1);
 		foodX = (rand() % (MaxX - 2) + 1);
 		++tail;
-		if (tail == 50) GameOn = false;
+		if (tail == 50)
+		{
+			GameOn = false;
+			std::cout << "YOU HAVE BEATEN THE GAME!!!!!" << std::endl;
+		}
+		// This is to "initialize" the Tail[] value at the new index, so that it is something other than a '0'. 
+				// This value being a '0' was causing the GameBoard[0][0] location to be a ' ' instead of a '#'. 
 		TailX[tail - 1] = prevSnakeX;
 		TailY[tail - 1] = prevSnakeY;
 	}
