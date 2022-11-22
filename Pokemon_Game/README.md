@@ -1,4 +1,5 @@
-#Pokemon Game
+# Pokemon Game
+
 Pokedex is supposed to allow the user to create up to 151 pokemon and store them in a .txt file for future use. 
 Every time you open the program the file is read into the program and you can search for and edit any pokemon that 
 you like and then the file will be updated and you can access these modifications at a later date. The program takes 
