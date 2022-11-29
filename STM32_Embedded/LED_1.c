@@ -27,7 +27,7 @@ int main(void)
     uint32_t* RCC = (uint32_t*)RCC_address;
     uint32_t* GPIOD_Mode = (uint32_t*)GPIOD_Mode_address;
     uint32_t* GPIOD_Data = (uint32_t*)GPIOD_Data_address;
-  //uint32_t* GPIOA_Mode = (uint32_t*)GPIOA_Data_address;//Default is INPUT;
+    uint32_t* GPIOA_Mode = (uint32_t*)GPIOA_Data_address;//Default is INPUT;
     uint32_t* GPIOA_Data = (uint32_t*)GPIOA_Data_address;
 
   //RCC AHB1 peripheral clock enable register Enable GPIOD & GPIOA
@@ -35,11 +35,11 @@ int main(void)
 
   //Configure GPIOs
     *GPIOD_Mode |= (1<<24); //OUTPUT. Set MODER12 to 01: General purpose output mode.
-  //*GPIOA_Mode |= (0<<0); //Default is 00 INPUT;
+    *GPIOA_Mode &= ~(3<<0); //Default is 00 INPUT;
 
 	while(1)
 	{
-		uint32_t readBit = (*GPIOA_Data & 0x0001);
+		uint8_t readBit = (uint8_t)(*GPIOA_Data & 0x0001);
 		if(readBit == 1)*GPIOD_Data |= (1<<12);
 		else *GPIOD_Data &= ~(1<<12);
 	}
