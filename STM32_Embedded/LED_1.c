@@ -3,7 +3,7 @@
  * @file           : main.c
  * @author         : Clinton Holladay
  * Turns on the LED if PA0 is HIGH.
- * I looked in the reference manual to find the memory addresses for all the GPIOA info
+ * I had to look in the reference manual to find the memory addresses for all the GPIOA info
  ******************************************************************************
 */
 
