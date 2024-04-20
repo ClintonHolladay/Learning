@@ -74,6 +74,18 @@ typedef struct
 	volatile uint32_t AFRH;			//GPIO alternate function high register
 }; GPIO_RegDef_t;
 
+// GPIO_RegDef_t MACROs
+
+#define GPIOA						((GPIO_RegDef_t*)GPIOA_BASEADDR)
+#define GPIOB						((GPIO_RegDef_t*)GPIOB_BASEADDR)
+#define GPIOC						((GPIO_RegDef_t*)GPIOC_BASEADDR)
+#define GPIOD						((GPIO_RegDef_t*)GPIOD_BASEADDR)
+#define GPIOE						((GPIO_RegDef_t*)GPIOE_BASEADDR)
+#define GPIOF						((GPIO_RegDef_t*)GPIOF_BASEADDR)
+#define GPIOG						((GPIO_RegDef_t*)GPIOG_BASEADDR)
+#define GPIOH						((GPIO_RegDef_t*)GPIOH_BASEADDR)
+#define GPIOI						((GPIO_RegDef_t*)GPIOI_BASEADDR)
+
 // RCC Reset Clock Control Register
 
 typedef struct
@@ -114,31 +126,67 @@ typedef struct
 	volatile uint32_t PLLI2SCFGR; 	//RCC PLLI2S configuration register
 	volatile uint32_t PLLSAICFGR;	//RCC PLL configuration register
 	volatile uint32_t DCKCFGR;		//RCC Dedicated Clock Configuration Register
-
 }; RCC_RegDef_t;
 
-#define GPIOA						((GPIO_RegDef_t*)GPIOA_BASEADDR)
-#define GPIOB						((GPIO_RegDef_t*)GPIOB_BASEADDR)
-#define GPIOC						((GPIO_RegDef_t*)GPIOC_BASEADDR)
-#define GPIOD						((GPIO_RegDef_t*)GPIOD_BASEADDR)
-#define GPIOE						((GPIO_RegDef_t*)GPIOE_BASEADDR)
-#define GPIOF						((GPIO_RegDef_t*)GPIOF_BASEADDR)
-#define GPIOG						((GPIO_RegDef_t*)GPIOG_BASEADDR)
-#define GPIOH						((GPIO_RegDef_t*)GPIOH_BASEADDR)
-#define GPIOI						((GPIO_RegDef_t*)GPIOI_BASEADDR)
+// RCC_RegDef_t MACROs
 
 #define RCC							((RCC_RegDef_t*)RCC_BASEADDR)
 
+// GPIOx Clock Enable MACROs
 
-#define GPIOA_PCLK_EN				(RCC->AHB1ENR |= (1 << 0))
-#define GPIOB_PCLK_EN
-#define GPIOC_PCLK_EN
-#define GPIOD_PCLK_EN
-#define GPIOE_PCLK_EN
-#define GPIOF_PCLK_EN
-#define GPIOG_PCLK_EN
-#define GPIOH_PCLK_EN
-#define GPIOI_PCLK_EN
+#define GPIOA_PCLK_EN()				(RCC->AHB1ENR |= (1 << 0))
+#define GPIOB_PCLK_EN()				(RCC->AHB1ENR |= (1 << 1))
+#define GPIOC_PCLK_EN()				(RCC->AHB1ENR |= (1 << 2))
+#define GPIOD_PCLK_EN()				(RCC->AHB1ENR |= (1 << 3))
+#define GPIOE_PCLK_EN()				(RCC->AHB1ENR |= (1 << 4))
+#define GPIOF_PCLK_EN()				(RCC->AHB1ENR |= (1 << 5))
+#define GPIOG_PCLK_EN()				(RCC->AHB1ENR |= (1 << 6))
+#define GPIOH_PCLK_EN()				(RCC->AHB1ENR |= (1 << 7))
+#define GPIOI_PCLK_EN()				(RCC->AHB1ENR |= (1 << 8))
+
+// I2Cx Clock Enable MACROs
+
+#define I2C1_PCLK_EN()				(RCC->APB1ENR |= (1 << 0))
+
+// SPIx Clock Enable MACROs
+
+#define SPI1_PCLK_EN()				(RCC->APB1ENR |= (1 << 0))
+
+// USARTx Clock Enable MACROs
+
+#define USART1_PCLK_EN()				(RCC->APB1ENR |= (1 << 0))
+
+// SYSCFGx Clock Enable MACROs
+
+#define SYSCFG_PCLK_EN()				(RCC->AHB2ENR |= (1 << 0))
+
+// GPIOx Clock Disable MACROs
+
+#define GPIOA_PCLK_DI()				(RCC->AHB1ENR |= (1 << 0))
+#define GPIOB_PCLK_DI()				(RCC->AHB1ENR |= (1 << 1))
+#define GPIOC_PCLK_DI()				(RCC->AHB1ENR |= (1 << 2))
+#define GPIOD_PCLK_DI()				(RCC->AHB1ENR |= (1 << 3))
+#define GPIOE_PCLK_DI()				(RCC->AHB1ENR |= (1 << 4))
+#define GPIOF_PCLK_DI()				(RCC->AHB1ENR |= (1 << 5))
+#define GPIOG_PCLK_DI()				(RCC->AHB1ENR |= (1 << 6))
+#define GPIOH_PCLK_DI()				(RCC->AHB1ENR |= (1 << 7))
+#define GPIOI_PCLK_DI()				(RCC->AHB1ENR |= (1 << 8))
+
+// I2Cx Clock Disable MACROs
+
+#define I2C1_PCLK_DI()				(RCC->APB1ENR |= (1 << 0))
+
+// SPIx Clock Disable MACROs
+
+#define SPI1_PCLK_DI()				(RCC->APB1ENR |= (1 << 0))
+
+// USARTx Clock Disable MACROs
+
+#define USART1_PCLK_DI()				(RCC->APB1ENR |= (1 << 0))
+
+// SYSCFGx Clock Disable MACROs
+
+#define SYSCFG_PCLK_DI()				(RCC->AHB2ENR |= (1 << 0))
 
 
 #endif /* INC_STM32F407G_H_ */
