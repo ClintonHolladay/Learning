@@ -205,4 +205,12 @@ typedef struct
 #define SYSCFG_PCLK_DI()				(RCC->AHB2ENR &= ~(1 << 14))
 
 
+#define ENABLE 			1
+#define DISABLE 		0
+#define SET 			ENABLE
+#define RESET 			DISABLE
+
+
+
+
 #endif /* INC_STM32F407G_H_ */
